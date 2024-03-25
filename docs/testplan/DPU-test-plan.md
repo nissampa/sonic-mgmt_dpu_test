@@ -4,6 +4,8 @@
 - [CLI Test Cases](#cli-test-cases)
     - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
+    - [1.3 Check fan LED ,speed, descripton and presence](#13-check-fan-LED-speed-descripton-presence)
+    - 
 
 
 ## Introduction
@@ -88,4 +90,33 @@ This test plan is to cover test cases for DPU platform.
 ```
 #### Pass/Fail Criteria
  * Verify output on switch to see all 169.254.x.x networks are showing up.
+
+### 1.3 Check fan LED ,speed, descripton and presence
+
+#### Steps
+ * Use command `show platform fan` to get ip addresses 
+
+
+#### Verify in
+ * Switch
+ * 
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# show platform fan
+  Drawer    LED            FAN    Speed    Direction    Presence    Status          Timestamp
+--------  -----  -------------  -------  -----------  ----------  --------  -----------------
+     N/A    N/A      PSU0.fan0      50%          N/A     Present        OK  20230907 07:04:55
+     N/A    N/A      PSU1.fan0      50%          N/A     Present        OK  20230907 07:04:55
+fantray0    N/A  fantray0.fan0      52%       intake     Present        OK  20230907 07:04:55
+fantray1    N/A  fantray1.fan0      52%       intake     Present        OK  20230907 07:04:55
+fantray2    N/A  fantray2.fan0      52%       intake     Present        OK  20230907 07:04:55
+fantray3    N/A  fantray3.fan0      52%       intake     Present        OK  20230907 07:04:55
+root@sonic:/home/cisco#
+
+```
+#### Pass/Fail Criteria
+ * Verfiy Presence, LED (green) and speed on the output
+
 
