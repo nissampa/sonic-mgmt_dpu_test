@@ -6,7 +6,7 @@
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
     - [1.3 Check fan LED speed descripton and presence](#13-check-fan-LED-speed-descripton-and-presence)
     - [1.4 Check PSU Status](#14-check-PSU-status)
-    - [1.5 Check DPU Console](#15-check-dpu-console)
+    - [1.5 Check DPU console](#15-check-dpu-console)
     - [1.6 Check platform inventory](#16-check-platform-inventory)
 
 ## Introduction
