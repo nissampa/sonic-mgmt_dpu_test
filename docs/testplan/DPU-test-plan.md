@@ -91,7 +91,7 @@ This test plan is to cover test cases for DPU platform.
 #### Pass/Fail Criteria
  * Verify output on switch to see all 169.254.x.x networks are showing up.
 
-### 1.3 Check fan LED ,speed, descripton and presence
+### 1.3 Check fan LED speed descripton and presence
 
 #### Steps
  * Use command `show platform fan` to get ip addresses 
