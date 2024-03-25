@@ -4,7 +4,7 @@
 - [CLI Test Cases](#cli-test-cases)
     - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
-    - [1.3 Check fan LED ,speed, descripton and presence](#13-check-fan-LED-speed-descripton-presence)
+    - [1.3 Check fan LED speed descripton and presence](#13-check-fan-LED-speed-descripton-presence)
     - 
 
 
