@@ -5,8 +5,8 @@
     - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
     - [1.3 Check fan LED speed descripton and presence](#13-check-fan-LED-speed-descripton-and-presence)
-    - 
-
+    - [1.4 Check PSU Status](#14-check-psu-status)
+    - [1.5 Check DPU Console]($15-check-dpu-console)
 
 ## Introduction
 
@@ -94,12 +94,11 @@ This test plan is to cover test cases for DPU platform.
 ### 1.3 Check fan LED speed descripton and presence
 
 #### Steps
- * Use command `show platform fan` to get ip addresses 
-
+ * Use command `show platform fan` to get FAN speed and Presence
 
 #### Verify in
  * Switch
- * 
+   
 #### Sample Output
 ```
 On Switch:
@@ -118,5 +117,97 @@ root@sonic:/home/cisco#
 ```
 #### Pass/Fail Criteria
  * Verfiy Presence, LED (green) and speed on the output
+
+### 1.4  Check PSU Status
+
+#### Steps
+ * Use command `show platform PSUstatus` to get PSU Status 
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# show platform PSUstatus
+PSU    Model            Serial       HW Rev      Voltage (V)    Current (A)    Power (W)  Status    LED
+-----  ---------------  -----------  --------  -------------  -------------  -----------  --------  -----
+PSU 1  UCSC-PSU1-2300W  DTM274202UG  A0                12.06          41.69       507.50  OK        green
+PSU 2  UCSC-PSU1-2300W  DTM234505JZ  02                12.03          40.25       491.00  OK        green
+
+```
+#### Pass/Fail Criteria
+ * Verfiy Status OK, LED green
+
+### 1.5  Check DPU Console
+
+#### Steps
+ * Use command `dconsole_uart.py -s <0-7>` to access console for given dpu
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch: (shows connection to dpu-4 console)
+
+root@sonic:/home/cisco# dconsole_uart.py -s 4
+/usr/bin/picocom -b 115200 /dev/ttyS8
+picocom v3.1
+
+port is        : /dev/ttyS8
+flowcontrol    : none
+baudrate is    : 115200
+parity is      : none
+databits are   : 8
+stopbits are   : 1
+escape is      : C-a
+local echo is  : no
+noinit is      : no
+noreset is     : no
+hangup is      : no
+nolock is      : no
+send_cmd is    : sz -vv
+receive_cmd is : rz -vv -E
+imap is        : 
+omap is        : 
+emap is        : crcrlf,delbs,
+logfile is     : none
+initstring     : none
+exit_after is  : not set
+exit is        : no
+
+Type [C-a] [C-h] to see available commands
+Terminal ready
+
+sonic login: admin
+Password: 
+Linux sonic 6.1.0-11-2-arm64 #1 SMP Debian 6.1.38-4 (2023-08-08) aarch64
+You are on
+  ____   ___  _   _ _  ____
+ / ___| / _ \| \ | (_)/ ___|
+ \___ \| | | |  \| | | |
+  ___) | |_| | |\  | | |___
+ |____/ \___/|_| \_|_|\____|
+
+-- Software for Open Networking in the Cloud --
+
+Unauthorized access and/or use are prohibited.
+All access and/or use are subject to monitoring.
+
+Help:    https://sonic-net.github.io/SONiC/
+
+Last login: Fri Jan 26 21:49:12 UTC 2024 from 169.254.143.2 on pts/1
+admin@sonic:~$ 
+admin@sonic:~$ 
+Terminating...
+Thanks for using picocom
+root@sonic:/home/cisco#
+
+```
+#### Pass/Fail Criteria
+ * Verfiy Login access is displayed.
+ * cntrl+a and then cntrl+x to come out of the dpu console.
 
 
