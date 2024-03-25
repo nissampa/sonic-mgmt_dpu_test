@@ -119,7 +119,7 @@ root@sonic:/home/cisco#
 #### Pass/Fail Criteria
  * Verfiy Presence, LED (green) and speed on the output
 
-### 1.4  Check PSU Status
+### 1.4 Check PSU Status
 
 #### Steps
  * Use command `show platform PSUstatus` to get PSU Status 
@@ -141,7 +141,7 @@ PSU 2  UCSC-PSU1-2300W  DTM234505JZ  02                12.03          40.25     
 #### Pass/Fail Criteria
  * Verfiy Status OK, LED green
    
-### 1.5  Check DPU Console
+### 1.5 Check DPU Console
 
 #### Steps
  * Use command `dconsole_uart.py -s <0-7>` to access console for given dpu
@@ -211,7 +211,7 @@ root@sonic:/home/cisco#
  * Verfiy Login access is displayed.
  * cntrl+a and then cntrl+x to come out of the dpu console.
 
-### 1.6  Check Platform Inventory
+### 1.6 Check Platform Inventory
 
 #### Steps
  * Use command `show platform inventory` to get inventories 
