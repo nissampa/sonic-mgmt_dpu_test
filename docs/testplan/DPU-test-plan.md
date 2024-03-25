@@ -140,7 +140,7 @@ PSU 2  UCSC-PSU1-2300W  DTM234505JZ  02                12.03          40.25     
 ```
 #### Pass/Fail Criteria
  * Verfiy Status OK, LED green
-
+   
 ### 1.5  Check DPU Console
 
 #### Steps
