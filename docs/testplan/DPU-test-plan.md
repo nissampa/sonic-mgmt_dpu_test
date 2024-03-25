@@ -7,6 +7,7 @@
     - [1.3 Check fan LED speed descripton and presence](#13-check-fan-LED-speed-descripton-and-presence)
     - [1.4 Check PSU Status](#14-check-PSU-status)
     - [1.5 Check DPU Console](#15-check-dpu-console)
+    - [1.6 Check platform inventory](#16-check-platform-inventory)
 
 ## Introduction
 
@@ -210,4 +211,61 @@ root@sonic:/home/cisco#
  * Verfiy Login access is displayed.
  * cntrl+a and then cntrl+x to come out of the dpu console.
 
+### 1.6  Check Platform Inventory
+
+#### Steps
+ * Use command `show platform inventory` to get inventories 
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# show platform inventory 
+    Name                Product ID      Version              Serial Number   Description
+
+Chassis
+    CHASSIS             8102-28FH-DPU-O 0.10                 FLM274802F3     Cisco 28x400G QSFPDD DPU-Enabled 2RU Smart Switch,Open SW
+
+Route Processors
+    RP0                 8102-28FH-DPU-O 0.10                 FLM274802F3     Cisco 28x400G QSFPDD DPU-Enabled 2RU Smart Switch,Open SW
+
+Sled Cards
+    SLED0               8K-DPU400-2A    0.10                 FLM2750036M     Cisco 800 2xDPU Sled AMD Elba
+    SLED1               8K-DPU400-2A    0.10                 FLM2750037E     Cisco 800 2xDPU Sled AMD Elba
+    SLED2               8K-DPU400-2A    0.10                 FLM27500389     Cisco 800 2xDPU Sled AMD Elba
+    SLED3               8K-DPU400-2A    0.10                 FLM2750038M     Cisco 800 2xDPU Sled AMD Elba
+
+Dpu Modules
+    DPU0                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750036M     Pensando DSC
+    DPU1                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750036M     Pensando DSC
+    DPU2                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750037E     Pensando DSC
+    DPU3                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750037E     Pensando DSC
+    DPU4                DSS-MTFUJI      6.1.0-11-2-arm64     FLM27500389     Pensando DSC
+    DPU5                DSS-MTFUJI      6.1.0-11-2-arm64     FLM27500389     Pensando DSC
+    DPU6                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750038M     Pensando DSC
+    DPU7                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750038M     Pensando DSC
+
+Power Supplies
+    psutray                                                                  
+        PSU0            UCSC-PSU1-2300W A0                   DTM274202UB     UCS 230000W AC-DC High Line RSP02 Power Supply
+        PSU1 -- not present
+
+Cooling Devices
+    fantray0            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray1            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray2            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray3            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+
+FPDs
+    RP0/info.0                          0.8.0-287                            \_SB_.PC00.RP07.PXSX.INFO
+    RP0/info.1                          0.4.7-122                            \_SB_.PC00.RP01.PXSX.INFO
+    RP0/info.2                          0.2.1-247                            \_SB_.PC00.RP10.PXSX.INFO
+    RP0/info.50.auto                    10.2.0-30                            \_SB_.PC00.RP07.PXSX.P2PF
+
+```
+#### Pass/Fail Criteria
+ *  Verify  product ID,version and serial of the DPU
 
