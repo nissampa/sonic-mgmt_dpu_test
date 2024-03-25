@@ -2,8 +2,8 @@
 
 - [Introduction](#introduction)
 - [CLI Test Cases](#cli-test-cases)
-    - [1.1 Check fwutil show status ]
-    - [1.2 Check midplane ip address between NPU and DPU]
+    - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
+    - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
 
 
 ## Introduction
