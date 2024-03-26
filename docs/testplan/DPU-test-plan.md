@@ -10,6 +10,8 @@
     - [1.6 Check platform inventory](#16-check-platform-inventory)
     - [1.7 Check platform voltage](#17-check-platform-voltage)
     - [1.8 Check platform current](#18-check-platform-current)
+    - [1.9 Check DPU shutdown and power up individually](#19-check-DPU-shutdown-and-power-up-individually)
+    - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
 
 ## Introduction
 
@@ -274,7 +276,7 @@ FPDs
 ### 1.7 Check platform voltage
 
 #### Steps
- * Use command `show platform voltage` to get PSU Status 
+ * Use command `show platform voltage` to get platform voltage
 
 #### Verify in
  * Switch
@@ -503,7 +505,7 @@ root@sonic:/home/cisco#
 ### 1.8 Check platform current
 
 #### Steps
- * Use command `show platform current` to get PSU Status 
+ * Use command `show platform current` to get platform current
 
 #### Verify in
  * Switch
@@ -541,4 +543,131 @@ P12V_U1_VR5_IINSENS_CPU     398 mA        N/A       N/A             N/A         
 ```
 #### Pass/Fail Criteria
  * Verfiy warnings are all false
+
+### 1.9 Check DPU shutdown and power up individually
+
+#### Steps
+ * Use command `dpupwr.py off <0-7>` to shut down individual dpu
+ * Use command `dpupwr.py on <0-7>` to power up individual dpu
+ * Use command `show platform inventory` to show dpu status
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# dpupwr.py off 4
+/sys/bus/pci/devices/0000:8d:00.0/remove: write 1
+root@sonic:/home/cisco#
+root@sonic:/home/cisco# show platform inventory 
+    Name                Product ID      Version              Serial Number   Description
+
+Chassis
+    CHASSIS             8102-28FH-DPU-O 0.10                 FLM274802F3     Cisco 28x400G QSFPDD DPU-Enabled 2RU Smart Switch,Open SW
+
+Route Processors
+    RP0                 8102-28FH-DPU-O 0.10                 FLM274802F3     Cisco 28x400G QSFPDD DPU-Enabled 2RU Smart Switch,Open SW
+
+Sled Cards
+    SLED0               8K-DPU400-2A    0.10                 FLM2750036M     Cisco 800 2xDPU Sled AMD Elba
+    SLED1               8K-DPU400-2A    0.10                 FLM2750037E     Cisco 800 2xDPU Sled AMD Elba
+    SLED2               8K-DPU400-2A    0.10                 FLM27500389     Cisco 800 2xDPU Sled AMD Elba
+    SLED3               8K-DPU400-2A    0.10                 FLM2750038M     Cisco 800 2xDPU Sled AMD Elba
+
+Dpu Modules
+    DPU0                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750036M     Pensando DSC
+    DPU1                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750036M     Pensando DSC
+    DPU2                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750037E     Pensando DSC
+    DPU3                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750037E     Pensando DSC
+    DPU4                DSS-MTFUJI                                           Powered off
+    DPU5                DSS-MTFUJI      6.1.0-11-2-arm64     FLM27500389     Pensando DSC
+    DPU6                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750038M     Pensando DSC
+    DPU7                DSS-MTFUJI      6.1.0-11-2-arm64     FLM2750038M     Pensando DSC
+
+Power Supplies
+    psutray                                                                  
+        PSU0            UCSC-PSU1-2300W A0                   DTM274202UB     UCS 230000W AC-DC High Line RSP02 Power Supply
+        PSU1 -- not present
+
+Cooling Devices
+    fantray0            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray1            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray2            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+    fantray3            FAN-2RU-PI-V3   N/A                  N/A             Cisco 8000 Series 2RU Fan with Port-side Air Intake Ver 3
+
+FPDs
+    RP0/info.0                          0.8.0-287                            \_SB_.PC00.RP07.PXSX.INFO
+    RP0/info.1                          0.4.7-122                            \_SB_.PC00.RP01.PXSX.INFO
+    RP0/info.2                          0.2.1-247                            \_SB_.PC00.RP10.PXSX.INFO
+    RP0/info.50.auto                    10.2.0-30                            \_SB_.PC00.RP07.PXSX.P2PF
+
+root@sonic:/home/cisco# dpupwr.py on 4
+Power on DPU4 for 20 seconds
+Power cycle DPU4 and wait 10 seconds
+Rescan PCI (30 seconds)
+[52281.119280] serial 0000:8f:00.1: Couldn't register serial port c000, irq 16, type 0, error -28
+Hello Mt Fuji
+169.254.24.1
+169.254.28.1
+169.254.32.1
+169.254.36.1
+169.254.139.1
+169.254.143.1
+169.254.147.1
+169.254.151.1
+root@sonic:/home/cisco#
+```
+#### Pass/Fail Criteria
+ * Verfiy dpu powered off in platform inventory after dpu shut down
+ * Verify dpu is showing upon platform inventory after dpu powered on
+
+### 1.10 Check removal of pcie link between npu and dpu
+
+#### Steps
+ * Use command `echo 1 > /sys/bus/pci/devices/BUS_ID/remove` to remove pcie link between npu and one dpu
+ * Use command `dpulink.sh` to assing ip address
+ * Use command `echo 1 > /sys/bus/pci/rescan` to rescan pcie links
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch: Showing example of one dpu pcie link
+
+root@sonic:/home/cisco# echo 1 > /sys/bus/pci/devices/0000:1a:00.0/remove
+root@sonic:/home/cisco# ping 169.254.28.1
+PING 169.254.28.1 (169.254.28.1) 56(84) bytes of data.
+^C
+--- 169.254.28.1 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1012ms
+
+root@sonic:/home/cisco# 
+root@sonic:/home/cisco# 
+root@sonic:/home/cisco# echo 1 > /sys/bus/pci/rescan
+root@sonic:/home/cisco# dpulink.sh
+Hello Mt Fuji
+169.254.24.1
+169.254.28.1
+169.254.32.1
+169.254.36.1
+169.254.139.1
+169.254.143.1
+169.254.147.1
+169.254.151.1
+root@sonic:/home/cisco# ping 169.254.28.1
+PING 169.254.28.1 (169.254.28.1) 56(84) bytes of data.
+64 bytes from 169.254.28.1: icmp_seq=1 ttl=64 time=0.329 ms
+^C
+--- 169.254.28.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.329/0.329/0.329/0.000 ms
+root@sonic:/home/cisco# 
+
+```
+#### Pass/Fail Criteria
+ * Verfiy ping is not going through after removing pcie link.
+ * Verify ping works between dpu and npu after bringing back up the link
 
