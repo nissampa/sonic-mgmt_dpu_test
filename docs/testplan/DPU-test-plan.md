@@ -17,8 +17,8 @@
     - [1.13 Check the Health of Switch and DPUs](#113-check-the-health-of-switch-and-dpus)
     - [1.14 Check memory on host](#114-check-memory-on-host)
     - [1.15 Check memory on DPU](#115-check-memory-on-dpu)
-    - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
-    - [1.17 Check reboot cause history](#117-check-reboot-cause-history)
+    - [1.16 Check reboot cause history](#116-check-reboot-cause-history)
+    - [1.17 Check CPU process on DPU](#117-check-cpu-process-on-dpu)
     - [1.18 Check the DPU state after OS rerboot](#118-check-the-dpu-state-after-os-reboot)
     - [1.19 Check DPU LED status](#119-check-dpu-led-status)
 
@@ -753,7 +753,7 @@ root@sonic:/home/cisco# show chassis health events
 ### 1.14 Check memory on host
 
 #### Steps
- *  Use command `show reboot-cause history` to show reboot cause of both switch and dpu.
+ *  Use command `TOP` to show process and memory it is using
    
 #### Verify in
  * Switch
@@ -762,31 +762,31 @@ root@sonic:/home/cisco# show chassis health events
 ```
 On Switch:
 
-root@sonic:/home/cisco# show reboot-cause history
+root@sonic:/home/cisco# top
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the logs from cli to see both switch and dpus reboot history.
+ * Verfiy the CPU within a threshold value on DPU
 
 ### 1.15 Check memory on DPU
 
 #### Steps
- *  Use command `show reboot-cause history` to show reboot cause of both switch and dpu.
+ *  Use command `top` to show process and memory it is using
    
 #### Verify in
- * Switch
+ * DPU
    
 #### Sample Output
 ```
-On Switch:
+On DPU:
 
-root@sonic:/home/cisco# show reboot-cause history
+root@sonic:/home/cisco# top
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the logs from cli to see both switch and dpus reboot history.
-   
-### 1.16 Check CPU process on DPU
+ * Verfiy the memory within a threshold value on DPU
+
+### 1.16 Check reboot cause history
 
 #### Steps
  *  Use command `show reboot-cause history` to show reboot cause of both switch and dpu.
@@ -803,11 +803,11 @@ root@sonic:/home/cisco# show reboot-cause history
 
 #### Pass/Fail Criteria 
  * Verfiy the logs from cli to see both switch and dpus reboot history.
-
-### 1.17 Check reboot cause history
+   
+### 1.17 Check CPU process on DPU
 
 #### Steps
- *  Use command `show reboot-cause history` to show reboot cause of both switch and dpu.
+ *  CLI - N/A
    
 #### Verify in
  * Switch
@@ -816,11 +816,11 @@ root@sonic:/home/cisco# show reboot-cause history
 ```
 On Switch:
 
-root@sonic:/home/cisco# show reboot-cause history
+root@sonic:/home/cisco# CLI - N/A
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the logs from cli to see both switch and dpus reboot history.
+ * Verfiy the RAM using pattern read/write tests
 
 ### 1.18 Check the DPU state after OS reboot
 
