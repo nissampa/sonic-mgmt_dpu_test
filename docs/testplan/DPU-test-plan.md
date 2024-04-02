@@ -12,6 +12,15 @@
     - [1.8 Check platform current](#18-check-platform-current)
     - [1.9 Check DPU shutdown and power up individually](#19-check-DPU-shutdown-and-power-up-individually)
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
+    - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
+    - [1.21 Check DPU LED status](#121-check-dpu-led-status)
+    - [1.12 Check the health of DPUs](#112-check-the-health-of-dpus)
+    - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
+    - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
+    - [1.15 Check the NTP date and timezone between DPU and NPU](#115-check-the-ntp-date-and-timezone-between-dpu-and-npu)
+    - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
+    - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
+    - [1.18 Check memory on host](#118-check-memory-on-host)
 
 ## Introduction
 
@@ -671,3 +680,26 @@ root@sonic:/home/cisco#
  * Verfiy ping is not going through after removing pcie link.
  * Verify ping works between dpu and npu after bringing back up the link
 
+### 1.11 Check graceful restart of NPU
+
+#### Steps
+ * Use command `reboot` to get reboot the host
+ * Wait for NPU to come up.
+ * Use command `show interface status` to chece the interfaces are up
+
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# reboot
+.
+.
+.
+.
+root@sonic:/home/cisco# show interface status
+```
+#### Pass/Fail Criteria
+ * Verfiy all the interface are up.
