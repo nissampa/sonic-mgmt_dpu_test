@@ -14,8 +14,8 @@
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
     - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
-    - [1.22 Check the health of DPUs](#122-check-the-health-of-dpus)
-    - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
+    - [1.13 Check the health of switch and DPUs](#113-check-the-health-of-switch-and-dpus)
+    - [1.23 Check the DPU state after OS boot](#123-check-the-dpu-state-after-os-reboot)
     - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
     - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
@@ -710,8 +710,9 @@ root@sonic:/home/cisco# show interface status
  * Use command `date` to get date and time zone on host.
  * Use command `ssh admin@169.254.x.x` to enter into required dpu.
  * Use command `date` again on dpu to show date and time zone of dpu.
+   
 #### Verify in
- * Switch
+ * Switch and dpu
    
 #### Sample Output
 ```
@@ -724,15 +725,36 @@ root@sonic:/home/cisco# ssh admin@169.254.24.1
 
 .
 .
+
+On DPU:
 root@sonic:/home/cisco# date
 ```
 #### Pass/Fail Criteria
  * Verfiy both the date and time zone are same
 
+### 1.13 Check the health of switch and DPUs
+
+#### Steps
+ * Use command `show chassis health-events` to get chassis health events. 
+   
+#### Verify in
+ * Switch and dpu
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# show chassis health events
+
+```
+#### Pass/Fail Criteria
+ * Verfiy that the output is showing only errors related to given option.
+
 ### 1.19 Check DPU LED status
 
 #### Steps
  * CLI - N/A
+   
 #### Verify in
  * Switch
    
