@@ -14,13 +14,13 @@
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
     - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
-    - [1.21 Check DPU LED status](#121-check-dpu-led-status)
     - [1.22 Check the health of DPUs](#122-check-the-health-of-dpus)
     - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
     - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
     - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
     - [1.18 Check memory on host](#118-check-memory-on-host)
+    - [1.19 Check DPU LED status](#119-check-dpu-led-status)
 
 ## Introduction
 
@@ -728,3 +728,20 @@ root@sonic:/home/cisco# date
 ```
 #### Pass/Fail Criteria
  * Verfiy both the date and time zone are same
+
+### 1.19 Check DPU LED status
+
+#### Steps
+ * CLI - N/A
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# <CLI>
+
+```
+#### Pass/Fail Criteria
+ * Verfiy LEDs are Green.
