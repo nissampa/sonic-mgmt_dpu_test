@@ -14,12 +14,12 @@
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
     - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
-    - [1.13 Check the health of switch and DPUs](#113-check-the-health-of-switch-and-dpus)
-    - [1.23 Check the DPU state after OS boot](#123-check-the-dpu-state-after-os-reboot)
+    - [1.13 Check the Health of Switch and DPUs](#113-check-the-health-of-switch-and-dpus)
     - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
     - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
-    - [1.18 Check memory on host](#118-check-memory-on-host)
+    - [1.15 Check memory on host](#115-check-memory-on-host)
+    - [1.18 Check the DPU state after OS boot](#118-check-the-dpu-state-after-os-reboot)
     - [1.19 Check DPU LED status](#119-check-dpu-led-status)
 
 ## Introduction
@@ -732,7 +732,7 @@ root@sonic:/home/cisco# date
 #### Pass/Fail Criteria
  * Verfiy both the date and time zone are same
 
-### 1.13 Check the health of switch and DPUs
+### 1.13 Check the Health of Switch and DPUs
 
 #### Steps
  * Use command `show chassis health-events` to get chassis health events. 
@@ -749,6 +749,27 @@ root@sonic:/home/cisco# show chassis health events
 ```
 #### Pass/Fail Criteria
  * Verfiy that the output is showing only errors related to given option.
+
+### 1.18 Check the DPU state after OS boot
+
+#### Steps
+ *  Use command `reboot` to reboot the os.
+ *  To check DPU state - CLI - N/A
+   
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# reboot
+.
+.
+root@sonic:/home/cisco# <CLI TO CHECK DPU STATE>
+```
+#### Pass/Fail Criteria
+ * Verfiy all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc.
 
 ### 1.19 Check DPU LED status
 
