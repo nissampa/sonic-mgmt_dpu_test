@@ -13,11 +13,11 @@
     - [1.9 Check DPU shutdown and power up individually](#19-check-DPU-shutdown-and-power-up-individually)
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
+    - [1.12 Check the NTP date and timezone between DPU and NPU](#115-check-the-ntp-date-and-timezone-between-dpu-and-npu)
     - [1.21 Check DPU LED status](#121-check-dpu-led-status)
-    - [1.12 Check the health of DPUs](#112-check-the-health-of-dpus)
+    - [1.22 Check the health of DPUs](#112-check-the-health-of-dpus)
     - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
     - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
-    - [1.15 Check the NTP date and timezone between DPU and NPU](#115-check-the-ntp-date-and-timezone-between-dpu-and-npu)
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
     - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
     - [1.18 Check memory on host](#118-check-memory-on-host)
@@ -703,3 +703,28 @@ root@sonic:/home/cisco# show interface status
 ```
 #### Pass/Fail Criteria
  * Verfiy all the interface are up.
+
+### 1.11 Check the NTP date and timezone between DPU and NPU
+
+#### Steps
+ * Use command `date` to get date and time zone on host.
+ * Use command `ssh admin@169.254.x.x` to enter into required dpu.
+ * Use command `date` again on dpu to show date and time zone of dpu.
+#### Verify in
+ * Switch
+   
+#### Sample Output
+```
+On Switch:
+
+root@sonic:/home/cisco# date
+.
+.
+root@sonic:/home/cisco# ssh admin@169.254.24.1
+
+.
+.
+root@sonic:/home/cisco# date
+```
+#### Pass/Fail Criteria
+ * Verfiy both the date and time zone are same
