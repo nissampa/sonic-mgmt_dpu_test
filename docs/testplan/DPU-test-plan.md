@@ -13,7 +13,7 @@
     - [1.9 Check DPU shutdown and power up individually](#19-check-DPU-shutdown-and-power-up-individually)
     - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
-    - [1.12 Check the NTP date and timezone between DPU and NPU](#115-check-the-ntp-date-and-timezone-between-dpu-and-npu)
+    - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
     - [1.21 Check DPU LED status](#121-check-dpu-led-status)
     - [1.22 Check the health of DPUs](#112-check-the-health-of-dpus)
     - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
