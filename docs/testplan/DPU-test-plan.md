@@ -15,7 +15,7 @@
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
     - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
     - [1.21 Check DPU LED status](#121-check-dpu-led-status)
-    - [1.22 Check the health of DPUs](#112-check-the-health-of-dpus)
+    - [1.22 Check the health of DPUs](#122-check-the-health-of-dpus)
     - [1.13 Check the DPU state after OS boot](#113-check-the-dpu-state-after-os-reboot)
     - [1.14 Check reboot cause history](#114-check-reboot-cause-history)
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
