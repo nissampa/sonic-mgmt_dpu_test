@@ -19,7 +19,7 @@
     - [1.16 Check CPU process on DPU](#116-check-cpu-process-on-dpu)
     - [1.17 Check memory on DPU](#117-check-memory-on-dpu)
     - [1.15 Check memory on host](#115-check-memory-on-host)
-    - [1.18 Check the DPU state after OS boot](#118-check-the-dpu-state-after-os-reboot)
+    - [1.18 Check the DPU state after OS rerboot](#118-check-the-dpu-state-after-os-reboot)
     - [1.19 Check DPU LED status](#119-check-dpu-led-status)
 
 ## Introduction
@@ -750,7 +750,7 @@ root@sonic:/home/cisco# show chassis health events
 #### Pass/Fail Criteria
  * Verfiy that the output is showing only errors related to given option.
 
-### 1.18 Check the DPU state after OS boot
+### 1.18 Check the DPU state after OS reboot
 
 #### Steps
  *  Use command `reboot` to reboot the os.
