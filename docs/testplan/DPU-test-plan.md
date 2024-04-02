@@ -15,11 +15,11 @@
     - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
     - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
     - [1.13 Check the Health of Switch and DPUs](#113-check-the-health-of-switch-and-dpus)
-    - [1.14 Check memory on host](#114-check-memory-on-host)
+    - [1.14 Check memory on Host](#114-check-memory-on-host)
     - [1.15 Check memory on DPU](#115-check-memory-on-dpu)
     - [1.16 Check reboot cause history](#116-check-reboot-cause-history)
     - [1.17 Check CPU process on DPU](#117-check-cpu-process-on-dpu)
-    - [1.18 Check the DPU state after OS rerboot](#118-check-the-dpu-state-after-os-reboot)
+    - [1.18 Check the DPU state after OS reboot](#118-check-the-dpu-state-after-os-reboot)
     - [1.19 Check DPU LED status](#119-check-dpu-led-status)
 
 ## Introduction
@@ -750,7 +750,7 @@ root@sonic:/home/cisco# show chassis health events
 #### Pass/Fail Criteria
  * Verfiy that the output is showing only errors related to given option.
 
-### 1.14 Check memory on host
+### 1.14 Check memory on Host
 
 #### Steps
  *  Use command `TOP` to show process and memory it is using
