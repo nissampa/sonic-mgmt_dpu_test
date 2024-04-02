@@ -810,13 +810,14 @@ root@sonic:/home/cisco# show reboot-cause history
  *  CLI - N/A
    
 #### Verify in
- * Switch
+ * DPU
    
 #### Sample Output
 ```
-On Switch:
+On DPU:
 
-root@sonic:/home/cisco# CLI - N/A
+CLI - N/A
+
 ```
 
 #### Pass/Fail Criteria 
