@@ -704,7 +704,7 @@ root@sonic:/home/cisco# show interface status
 #### Pass/Fail Criteria
  * Verfiy all the interface are up.
 
-### 1.11 Check the NTP date and timezone between DPU and NPU
+### 1.12 Check the NTP date and timezone between DPU and NPU
 
 #### Steps
  * Use command `date` to get date and time zone on host.
