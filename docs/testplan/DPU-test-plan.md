@@ -768,8 +768,8 @@ root@sonic:/home/cisco# reboot
 .
 root@sonic:/home/cisco# <CLI TO CHECK DPU STATE>
 ```
-#### Pass/Fail Criteria
- * Verfiy all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc.
+#### Pass/Fail Criteria 
+ * Verfiy all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc. for all dpus
 
 ### 1.19 Check DPU LED status
 
