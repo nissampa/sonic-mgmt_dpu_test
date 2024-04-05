@@ -130,7 +130,7 @@ root@sonic:/home/cisco#
 
 ```
 #### Pass/Fail Criteria
- * Verfiy Presence, LED (green) and speed on the output
+ * Verify Presence, LED (green) and speed on the output
 
 ### 1.4 Check PSU Status
 
@@ -152,7 +152,7 @@ PSU 2  UCSC-PSU1-2300W  DTM234505JZ  02                12.03          40.25     
 
 ```
 #### Pass/Fail Criteria
- * Verfiy Status OK, LED green
+ * Verify Status OK, LED green
    
 ### 1.5 Check DPU Console
 
@@ -221,7 +221,7 @@ root@sonic:/home/cisco#
 
 ```
 #### Pass/Fail Criteria
- * Verfiy Login access is displayed.
+ * Verify Login access is displayed.
  * cntrl+a and then cntrl+x to come out of the dpu console.
 
 ### 1.6 Check Platform Inventory
@@ -509,7 +509,7 @@ root@sonic:/home/cisco#
 
 ```
 #### Pass/Fail Criteria
- * Verfiy warnings are all false
+ * Verify warnings are all false
 
 ### 1.8 Check platform current
 
@@ -551,7 +551,7 @@ P12V_U1_VR5_IINSENS_CPU     398 mA        N/A       N/A             N/A         
    VP1P8_VCCIN_ISEN_CPU   13578 mA        N/A       N/A             N/A            N/A      False  20230619 11:26:09
 ```
 #### Pass/Fail Criteria
- * Verfiy warnings are all false
+ * Verify warnings are all false
 
 ### 1.9 Check DPU shutdown and power up individually
 
@@ -629,7 +629,7 @@ Hello Mt Fuji
 root@sonic:/home/cisco#
 ```
 #### Pass/Fail Criteria
- * Verfiy dpu powered off in platform inventory after dpu shut down
+ * Verify dpu powered off in platform inventory after dpu shut down
  * Verify dpu is showing upon platform inventory after dpu powered on
 
 ### 1.10 Check removal of pcie link between npu and dpu
@@ -677,7 +677,7 @@ root@sonic:/home/cisco#
 
 ```
 #### Pass/Fail Criteria
- * Verfiy ping is not going through after removing pcie link.
+ * Verify ping is not going through after removing pcie link.
  * Verify ping works between dpu and npu after bringing back up the link
 
 ### 1.11 Check graceful restart of NPU
@@ -702,7 +702,7 @@ root@sonic:/home/cisco# reboot
 root@sonic:/home/cisco# show interface status
 ```
 #### Pass/Fail Criteria
- * Verfiy all the interface are up.
+ * Verify all the interface are up.
 
 ### 1.12 Check the NTP date and timezone between DPU and NPU
 
@@ -730,7 +730,7 @@ On DPU:
 root@sonic:/home/cisco# date
 ```
 #### Pass/Fail Criteria
- * Verfiy both the date and time zone are same
+ * Verify both the date and time zone are same
 
 ### 1.13 Check the Health of Switch and DPUs
 
@@ -748,7 +748,7 @@ root@sonic:/home/cisco# show chassis health events
 
 ```
 #### Pass/Fail Criteria
- * Verfiy that the output is showing only errors related to given option.
+ * Verify that the output is showing only errors related to given option.
 
 ### 1.14 Check memory on Host
 
@@ -766,7 +766,7 @@ root@sonic:/home/cisco# top
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the CPU within a threshold value on DPU
+ * Verify the CPU within a threshold value on DPU
 
 ### 1.15 Check memory on DPU
 
@@ -784,7 +784,7 @@ root@sonic:/home/cisco# top
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the memory within a threshold value on DPU
+ * Verify the memory within a threshold value on DPU
 
 ### 1.16 Check reboot cause history
 
@@ -802,7 +802,7 @@ root@sonic:/home/cisco# show reboot-cause history
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the logs from cli to see both switch and dpus reboot history.
+ * Verify the logs from cli to see both switch and dpus reboot history.
    
 ### 1.17 Check CPU process on DPU
 
@@ -821,7 +821,7 @@ CLI - N/A
 ```
 
 #### Pass/Fail Criteria 
- * Verfiy the RAM using pattern read/write tests
+ * Verify the RAM using pattern read/write tests
 
 ### 1.18 Check the DPU state after OS reboot
 
@@ -842,7 +842,7 @@ root@sonic:/home/cisco# reboot
 root@sonic:/home/cisco# <CLI TO CHECK DPU STATE>
 ```
 #### Pass/Fail Criteria 
- * Verfiy all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc. for all dpus
+ * Verify all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc. for all dpus
 
 ### 1.19 Check DPU LED status
 
@@ -860,4 +860,4 @@ root@sonic:/home/cisco# <CLI>
 
 ```
 #### Pass/Fail Criteria
- * Verfiy LEDs are Green.
+ * Verify LEDs are Green.
