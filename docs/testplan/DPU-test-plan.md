@@ -4,7 +4,7 @@
 - [CLI Test Cases](#cli-test-cases)
     - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
-    - [1.3 Check fan LED speed descripton and presence](#13-check-fan-LED-speed-descripton-and-presence)
+    - [1.3 Check fan LED speed description and presence](#13-check-fan-LED-speed-descripton-and-presence)
     - [1.4 Check psu status](#14-check-psu-status)
     - [1.5 Check dpu console](#15-check-dpu-console)
     - [1.6 Check platform inventory](#16-check-platform-inventory)
@@ -105,7 +105,7 @@ This test plan is to cover test cases for DPU platform.
 #### Pass/Fail Criteria
  * Verify output on switch to see all 169.254.x.x networks are showing up.
 
-### 1.3 Check fan LED speed descripton and presence
+### 1.3 Check fan LED speed description and presence
 
 #### Steps
  * Use command `show platform fan` to get FAN speed and Presence
@@ -135,7 +135,7 @@ root@sonic:/home/cisco#
 ### 1.4 Check PSU Status
 
 #### Steps
- * Use command `show platform PSUstatus` to get PSU Status 
+ * Use command `show platform psustatus` to get PSU Status 
 
 #### Verify in
  * Switch
@@ -144,7 +144,7 @@ root@sonic:/home/cisco#
 ```
 On Switch:
 
-root@sonic:/home/cisco# show platform PSUstatus
+root@sonic:/home/cisco# show platform psustatus
 PSU    Model            Serial       HW Rev      Voltage (V)    Current (A)    Power (W)  Status    LED
 -----  ---------------  -----------  --------  -------------  -------------  -----------  --------  -----
 PSU 1  UCSC-PSU1-2300W  DTM274202UG  A0                12.06          41.69       507.50  OK        green
@@ -685,7 +685,7 @@ root@sonic:/home/cisco#
 #### Steps
  * Use command `reboot` to get reboot the host
  * Wait for NPU to come up.
- * Use command `show interface status` to chece the interfaces are up
+ * Use command `show interface status` to check the interfaces are up
 
 #### Verify in
  * Switch
@@ -702,7 +702,7 @@ root@sonic:/home/cisco# reboot
 root@sonic:/home/cisco# show interface status
 ```
 #### Pass/Fail Criteria
- * Verify all the interface are up.
+ * Verify all the interfaces are up.
 
 ### 1.12 Check the NTP date and timezone between DPU and NPU
 
