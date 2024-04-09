@@ -4,23 +4,20 @@
 - [CLI Test Cases](#cli-test-cases)
     - [1.1 Check fwutil show status ](#11-check-fwutil-show-status)
     - [1.2 Check midplane ip address between NPU and DPU](#12-check-midplane-ip-address-between-NPU-and-DPU)
-    - [1.3 Check fan LED speed description and presence](#13-check-fan-LED-speed-descripton-and-presence)
-    - [1.4 Check psu status](#14-check-psu-status)
-    - [1.5 Check dpu console](#15-check-dpu-console)
-    - [1.6 Check platform inventory](#16-check-platform-inventory)
-    - [1.7 Check platform voltage](#17-check-platform-voltage)
-    - [1.8 Check platform current](#18-check-platform-current)
-    - [1.9 Check DPU shutdown and power up individually](#19-check-DPU-shutdown-and-power-up-individually)
-    - [1.10 Check removal of pcie link between npu and dpu](#110-check-removal-of-pcie-link-between-npu-and-dpu)
-    - [1.11 Check graceful restart of NPU](#111-check-graceful-restart-of-npu)
-    - [1.12 Check the NTP date and timezone between DPU and NPU](#112-check-the-ntp-date-and-timezone-between-dpu-and-npu)
-    - [1.13 Check the Health of Switch and DPUs](#113-check-the-health-of-switch-and-dpus)
-    - [1.14 Check memory on Host](#114-check-memory-on-host)
-    - [1.15 Check memory on DPU](#115-check-memory-on-dpu)
-    - [1.16 Check reboot cause history](#116-check-reboot-cause-history)
-    - [1.17 Check CPU process on DPU](#117-check-cpu-process-on-dpu)
-    - [1.18 Check the DPU state after OS reboot](#118-check-the-dpu-state-after-os-reboot)
-    - [1.19 Check DPU LED status](#119-check-dpu-led-status)
+    - [1.3 Check dpu console](#13-check-dpu-console)
+    - [1.4 Check platform inventory](#14-check-platform-inventory)
+    - [1.5 Check platform voltage](#15-check-platform-voltage)
+    - [1.6 Check platform current](#16-check-platform-current)
+    - [1.7 Check DPU shutdown and power up individually](#17-check-DPU-shutdown-and-power-up-individually)
+    - [1.8 Check removal of pcie link between npu and dpu](#18-check-removal-of-pcie-link-between-npu-and-dpu)
+    - [1.9 Check graceful restart of NPU](#19-check-graceful-restart-of-npu)
+    - [1.10 Check the NTP date and timezone between DPU and NPU](#110-check-the-ntp-date-and-timezone-between-dpu-and-npu)
+    - [1.11 Check the Health of Switch and DPUs](#111-check-the-health-of-switch-and-dpus)
+    - [1.12 Check memory on DPU](#112-check-memory-on-dpu)
+    - [1.13 Check reboot cause history](#113-check-reboot-cause-history)
+    - [1.14 Check CPU process on DPU](#114-check-cpu-process-on-dpu)
+    - [1.15 Check the DPU state after OS reboot](#115-check-the-dpu-state-after-os-reboot)
+    - [1.16 Check DPU LED status](#116-check-dpu-led-status)
 
 ## Introduction
 
@@ -104,57 +101,8 @@ This test plan is to cover test cases for DPU platform.
 ```
 #### Pass/Fail Criteria
  * Verify output on switch to see all 169.254.x.x networks are showing up.
-
-### 1.3 Check fan LED speed description and presence
-
-#### Steps
- * Use command `show platform fan` to get FAN speed and Presence
-
-#### Verify in
- * Switch
    
-#### Sample Output
-```
-On Switch:
-
-root@sonic:/home/cisco# show platform fan
-  Drawer    LED            FAN    Speed    Direction    Presence    Status          Timestamp
---------  -----  -------------  -------  -----------  ----------  --------  -----------------
-     N/A    N/A      PSU0.fan0      50%          N/A     Present        OK  20230907 07:04:55
-     N/A    N/A      PSU1.fan0      50%          N/A     Present        OK  20230907 07:04:55
-fantray0    N/A  fantray0.fan0      52%       intake     Present        OK  20230907 07:04:55
-fantray1    N/A  fantray1.fan0      52%       intake     Present        OK  20230907 07:04:55
-fantray2    N/A  fantray2.fan0      52%       intake     Present        OK  20230907 07:04:55
-fantray3    N/A  fantray3.fan0      52%       intake     Present        OK  20230907 07:04:55
-root@sonic:/home/cisco#
-
-```
-#### Pass/Fail Criteria
- * Verify Presence, LED (green) and speed on the output
-
-### 1.4 Check PSU Status
-
-#### Steps
- * Use command `show platform psustatus` to get PSU Status 
-
-#### Verify in
- * Switch
-   
-#### Sample Output
-```
-On Switch:
-
-root@sonic:/home/cisco# show platform psustatus
-PSU    Model            Serial       HW Rev      Voltage (V)    Current (A)    Power (W)  Status    LED
------  ---------------  -----------  --------  -------------  -------------  -----------  --------  -----
-PSU 1  UCSC-PSU1-2300W  DTM274202UG  A0                12.06          41.69       507.50  OK        green
-PSU 2  UCSC-PSU1-2300W  DTM234505JZ  02                12.03          40.25       491.00  OK        green
-
-```
-#### Pass/Fail Criteria
- * Verify Status OK, LED green
-   
-### 1.5 Check DPU Console
+### 1.3 Check DPU Console
 
 #### Steps
  * Use command `dconsole_uart.py -s <0-7>` to access console for given dpu
@@ -224,7 +172,7 @@ root@sonic:/home/cisco#
  * Verify Login access is displayed.
  * cntrl+a and then cntrl+x to come out of the dpu console.
 
-### 1.6 Check Platform Inventory
+### 1.4 Check Platform Inventory
 
 #### Steps
  * Use command `show platform inventory` to get inventories 
@@ -282,7 +230,7 @@ FPDs
 #### Pass/Fail Criteria
  *  Verify  product ID,version and serial of the DPU
 
-### 1.7 Check platform voltage
+### 1.5 Check platform voltage
 
 #### Steps
  * Use command `show platform voltage` to get platform voltage
@@ -511,7 +459,7 @@ root@sonic:/home/cisco#
 #### Pass/Fail Criteria
  * Verify warnings are all false
 
-### 1.8 Check platform current
+### 1.6 Check platform current
 
 #### Steps
  * Use command `show platform current` to get platform current
@@ -553,7 +501,7 @@ P12V_U1_VR5_IINSENS_CPU     398 mA        N/A       N/A             N/A         
 #### Pass/Fail Criteria
  * Verify warnings are all false
 
-### 1.9 Check DPU shutdown and power up individually
+### 1.7 Check DPU shutdown and power up individually
 
 #### Steps
  * Use command `dpupwr.py off <0-7>` to shut down individual dpu
@@ -632,7 +580,7 @@ root@sonic:/home/cisco#
  * Verify dpu powered off in platform inventory after dpu shut down
  * Verify dpu is showing upon platform inventory after dpu powered on
 
-### 1.10 Check removal of pcie link between npu and dpu
+### 1.8 Check removal of pcie link between npu and dpu
 
 #### Steps
  * Use command `echo 1 > /sys/bus/pci/devices/BUS_ID/remove` to remove pcie link between npu and one dpu
@@ -680,7 +628,7 @@ root@sonic:/home/cisco#
  * Verify ping is not going through after removing pcie link.
  * Verify ping works between dpu and npu after bringing back up the link
 
-### 1.11 Check graceful restart of NPU
+### 1.9 Check graceful restart of NPU
 
 #### Steps
  * Use command `reboot` to get reboot the host
@@ -704,7 +652,7 @@ root@sonic:/home/cisco# show interface status
 #### Pass/Fail Criteria
  * Verify all the interfaces are up.
 
-### 1.12 Check the NTP date and timezone between DPU and NPU
+### 1.10 Check the NTP date and timezone between DPU and NPU
 
 #### Steps
  * Use command `date` to get date and time zone on host.
@@ -732,7 +680,7 @@ root@sonic:/home/cisco# date
 #### Pass/Fail Criteria
  * Verify both the date and time zone are same
 
-### 1.13 Check the Health of Switch and DPUs
+### 1.11 Check the Health of Switch and DPUs
 
 #### Steps
  * Use command `show chassis health-events` to get chassis health events. 
@@ -750,25 +698,7 @@ root@sonic:/home/cisco# show chassis health events
 #### Pass/Fail Criteria
  * Verify that the output is showing only errors related to given option.
 
-### 1.14 Check memory on Host
-
-#### Steps
- *  Use command `TOP` to show process and memory it is using
-   
-#### Verify in
- * Switch
-   
-#### Sample Output
-```
-On Switch:
-
-root@sonic:/home/cisco# top
-```
-
-#### Pass/Fail Criteria 
- * Verify the CPU within a threshold value on DPU
-
-### 1.15 Check memory on DPU
+### 1.12 Check memory on DPU
 
 #### Steps
  *  Use command `top` to show process and memory it is using
@@ -786,7 +716,7 @@ root@sonic:/home/cisco# top
 #### Pass/Fail Criteria 
  * Verify the memory within a threshold value on DPU
 
-### 1.16 Check reboot cause history
+### 1.13 Check reboot cause history
 
 #### Steps
  *  Use command `show reboot-cause history` to show reboot cause of both switch and dpu.
@@ -804,7 +734,7 @@ root@sonic:/home/cisco# show reboot-cause history
 #### Pass/Fail Criteria 
  * Verify the logs from cli to see both switch and dpus reboot history.
    
-### 1.17 Check CPU process on DPU
+### 1.14 Check CPU process on DPU
 
 #### Steps
  *  CLI - N/A
@@ -823,7 +753,7 @@ CLI - N/A
 #### Pass/Fail Criteria 
  * Verify the RAM using pattern read/write tests
 
-### 1.18 Check the DPU state after OS reboot
+### 1.15 Check the DPU state after OS reboot
 
 #### Steps
  *  Use command `reboot` to reboot the os.
@@ -844,7 +774,7 @@ root@sonic:/home/cisco# <CLI TO CHECK DPU STATE>
 #### Pass/Fail Criteria 
  * Verify all the state changes shown by cli are reflected properly such as reboot cause, pcie link failure, etc. for all dpus
 
-### 1.19 Check DPU LED status
+### 1.16 Check DPU LED status
 
 #### Steps
  * CLI - N/A
