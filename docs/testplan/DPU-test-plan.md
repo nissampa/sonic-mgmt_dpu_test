@@ -630,9 +630,7 @@ root@sonic:/home/cisco# show platform pcieinfo -c
 ### 1.8 Check the NTP date and timezone between DPU and NPU
 
 #### Steps
- * In Switch, under the file /etc/ntp.conf configure it to use the ntp server and restart ntp.service to configure
- * In DPU, similarly under the ntp configuration use the switches ip as ntp server and restart ntp service to configure 
- * Use command `date` to start the NTP server on Swith
+ * Use command `date` on Swith
  * Use command `ssh admin@169.254.x.x` to enter into required dpu.
  * Use command `date` to start the NTP server on DPU
  * Use command `date` to get date and time zone on host.
