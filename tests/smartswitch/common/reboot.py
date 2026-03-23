@@ -138,7 +138,6 @@ def perform_reboot(duthost, reboot_type=REBOOT_TYPE_COLD, dpu_name=None,
 
     # cli_based path
     res = log_and_perform_reboot(duthost, reboot_type, dpu_name)
-    if res.get('failed', res.get('rc', 0) != 0):
     if dpu_name is None:
         if res.get('failed', res.get('rc', 0) != 0):
             pytest.fail("Failed to reboot the {} with type {}".format(duthost.hostname, reboot_type))
