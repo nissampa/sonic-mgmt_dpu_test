@@ -12,13 +12,15 @@ from tests.common.helpers.assertions import pytest_assert
 from tests.common.helpers.platform_api import module
 from tests.common.mellanox_data import is_mellanox_device
 from tests.common.cisco_data import is_cisco_device
-from tests.smartswitch.common.device_utils_dpu import check_dpu_ping_status,\
-    check_dpu_module_status, check_dpu_reboot_cause, check_pmon_status,\
-    parse_dpu_memory_usage, parse_system_health_summary,\
-    pre_test_check, post_test_dpus_check,\
-    dpus_shutdown_and_check, dpus_startup_and_check,\
-    check_dpu_health_status, check_midplane_status, num_dpu_modules, dpu_setup,\
-    get_dpuhost_for_dpu  # noqa: F401
+from tests.smartswitch.common.device_utils_dpu import (  # noqa: F401
+    check_dpu_ping_status,
+    check_dpu_module_status, check_dpu_reboot_cause, check_pmon_status,
+    parse_dpu_memory_usage, parse_system_health_summary,
+    pre_test_check, post_test_dpus_check,
+    dpus_shutdown_and_check, dpus_startup_and_check,
+    check_dpu_health_status, check_midplane_status, num_dpu_modules, dpu_setup,
+    get_dpuhost_for_dpu
+)
 from tests.common.platform.device_utils import platform_api_conn, start_platform_api_service  # noqa: F401,F403
 
 pytestmark = [
@@ -61,25 +63,20 @@ def test_reboot_cause(duthosts, dpuhosts,
                       enum_rand_one_per_hwsku_hostname,
                       platform_api_conn, num_dpu_modules):    # noqa: F811
     """
-    @summary: Verify `Reboot Cause` using parallel execution.
+    @summary: Stub - this test has been moved to test_reload_dpu.py.
+
+    The canonical reboot-cause test for DPUs now lives in:
+        tests/smartswitch/platform_tests/test_reload_dpu.py::test_reboot_cause
+
+    This stub is kept here for backward compatibility so that existing test
+    selection commands that reference test_platform_dpu.py::test_reboot_cause
+    still produce a clear, actionable failure message rather than a silent skip.
     """
-    duthost = duthosts[enum_rand_one_per_hwsku_hostname]
-
-    ip_address_list, dpu_on_list, dpu_off_list = pre_test_check(
-                                                 duthost,
-                                                 platform_api_conn,
-                                                 num_dpu_modules)
-
-    logging.info("Shutting DOWN the DPUs in parallel")
-    dpus_shutdown_and_check(duthost, dpu_on_list, num_dpu_modules)
-
-    logging.info("Starting UP the DPUs in parallel")
-    dpus_startup_and_check(duthost, dpu_on_list, num_dpu_modules)
-    post_test_dpus_check(duthost, dpuhosts,
-                         dpu_on_list, ip_address_list,
-                         num_dpu_modules,
-                         re.compile(r"reboot|Non-Hardware",
-                                    re.IGNORECASE))
+    pytest.skip(
+        "test_reboot_cause has been moved to test_reload_dpu.py. "
+        "Please update your test selection to use "
+        "tests/smartswitch/platform_tests/test_reload_dpu.py::test_reboot_cause"
+    )
 
 
 def test_pcie_link(duthosts, dpuhosts,

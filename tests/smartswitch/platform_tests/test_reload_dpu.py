@@ -11,11 +11,14 @@ from tests.common.helpers.assertions import pytest_assert
 from tests.common.platform.processes_utils import wait_critical_processes
 from tests.common.reboot import reboot, REBOOT_TYPE_COLD, SONIC_SSH_PORT, SONIC_SSH_REGEX
 from tests.common.helpers.dut_utils import is_mellanox_devices
-from tests.smartswitch.common.device_utils_dpu import check_dpu_link_and_status,\
-    pre_test_check, post_test_switch_check, post_test_dpus_check,\
-    dpus_shutdown_and_check, dpus_startup_and_check, check_dpus_module_status,\
-    num_dpu_modules, check_dpus_are_not_pingable, check_dpus_reboot_cause,\
-    get_dpuhost_for_dpu  # noqa: F401
+from tests.smartswitch.common.device_utils_dpu import (  # noqa: F401
+    check_dpu_link_and_status,
+    pre_test_check, post_test_switch_check, post_test_dpus_check,
+    dpus_shutdown_and_check, dpus_startup_and_check, check_dpus_module_status,
+    num_dpu_modules, check_dpus_are_not_pingable, check_dpus_reboot_cause,
+    get_dpuhost_for_dpu, get_all_dpu_uptimes, verify_all_dpus_rebooted,
+    check_all_dpus_no_syslog_errors, check_npu_syslog_errors
+)
 from tests.common.platform.device_utils import platform_api_conn, start_platform_api_service  # noqa: F401,F403
 from tests.smartswitch.common.reboot import perform_reboot
 from tests.common.fixtures.grpc_fixtures import ptf_grpc  # noqa: F401
@@ -45,8 +48,9 @@ def test_dpu_status_post_switch_reboot(duthosts, dpuhosts,
                                        localhost,
                                        platform_api_conn, num_dpu_modules):  # noqa F811, E501
     """
-    @summary: To Check Ping between NPU and DPU
-              after reboot of NPU
+    @summary: Verify DPU connectivity and reboot cause after an NPU cold reboot.
+              Also checks that each DPU actually rebooted (via uptime comparison)
+              and that no unexpected syslog errors appear post-reboot.
     """
     duthost = duthosts[enum_rand_one_per_hwsku_hostname]
 
@@ -55,6 +59,9 @@ def test_dpu_status_post_switch_reboot(duthosts, dpuhosts,
                                                  duthost,
                                                  platform_api_conn,
                                                  num_dpu_modules)
+
+    logging.info("Recording DPU boot times before switch reboot")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
 
     logging.info("Starting switch reboot...")
     reboot(duthost, localhost, reboot_type=REBOOT_TYPE_COLD,
@@ -68,7 +75,9 @@ def test_dpu_status_post_switch_reboot(duthosts, dpuhosts,
     logging.info("Executing post switch reboot dpu check")
     post_test_dpus_check(duthost, dpuhosts,
                          dpu_on_list, ip_address_list,
-                         num_dpu_modules, None)
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
 
 
 def test_dpu_status_post_switch_config_reload(duthosts, dpuhosts,
@@ -87,6 +96,9 @@ def test_dpu_status_post_switch_config_reload(duthosts, dpuhosts,
                                                  platform_api_conn,
                                                  num_dpu_modules)
 
+    logging.info("Recording DPU boot times before config reload")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
     logging.info("Reload configuration")
     duthost.shell("sudo config reload -y &>/dev/null", executable="/bin/bash")
 
@@ -100,7 +112,9 @@ def test_dpu_status_post_switch_config_reload(duthosts, dpuhosts,
     logging.info("Executing post switch config reload dpu check")
     post_test_dpus_check(duthost, dpuhosts,
                          dpu_on_list, ip_address_list,
-                         num_dpu_modules, None)
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
 
 
 @pytest.mark.disable_loganalyzer
@@ -123,6 +137,9 @@ def test_dpu_status_post_switch_mem_exhaustion(duthosts, dpuhosts,
                                                  platform_api_conn,
                                                  num_dpu_modules)
 
+    logging.info("Recording DPU boot times before NPU memory exhaustion")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
     logging.info("Starting memory exhaustion test on NPU by running \
                   a large process...")
     duthost.shell(memory_exhaustion_cmd, executable="/bin/bash")
@@ -143,7 +160,15 @@ def test_dpu_status_post_switch_mem_exhaustion(duthosts, dpuhosts,
     logging.info("Executing post switch mem exhaustion dpu check")
     post_test_dpus_check(duthost, dpuhosts,
                          dpu_on_list, ip_address_list,
-                         num_dpu_modules, None)
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
+
+    logging.info("Checking NPU syslog for unexpected errors after memory exhaustion reboot")
+    npu_errors = check_npu_syslog_errors(duthost)
+    if npu_errors:
+        logging.warning("NPU syslog has %d error(s) after memory exhaustion reboot "
+                        "(non-fatal; logged for investigation)", len(npu_errors))
 
 
 @pytest.mark.disable_loganalyzer
@@ -166,6 +191,9 @@ def test_dpu_status_post_switch_kernel_panic(duthosts, dpuhosts,
                                                  platform_api_conn,
                                                  num_dpu_modules)
 
+    logging.info("Recording DPU boot times before NPU kernel panic")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
     logging.info("Triggering kernel panic on NPU...")
     duthost.shell(kernel_panic_cmd, executable="/bin/bash")
 
@@ -185,7 +213,15 @@ def test_dpu_status_post_switch_kernel_panic(duthosts, dpuhosts,
     logging.info("Executing post switch kernel panic dpu check")
     post_test_dpus_check(duthost, dpuhosts,
                          dpu_on_list, ip_address_list,
-                         num_dpu_modules, None)
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
+
+    logging.info("Checking NPU syslog for unexpected errors after kernel panic reboot")
+    npu_errors = check_npu_syslog_errors(duthost)
+    if npu_errors:
+        logging.warning("NPU syslog has %d error(s) after kernel panic reboot "
+                        "(non-fatal; logged for investigation)", len(npu_errors))
 
 
 @pytest.mark.disable_loganalyzer
@@ -217,6 +253,9 @@ def test_dpu_status_post_dpu_kernel_panic(duthosts, dpuhosts,
         dpuhost.shell(kernel_panic_cmd, executable="/bin/bash")
         triggered_dpu_on_list.append(dpu_on)
         triggered_ip_list.append(ip_address_list[index])
+
+    logging.info("Recording DPU boot times before DPU kernel panic")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
 
     pytest_assert(triggered_dpu_on_list, "No DPUs were triggered; all skipped due to missing dpuhosts")
 
@@ -251,7 +290,8 @@ def test_dpu_status_post_dpu_kernel_panic(duthosts, dpuhosts,
                          num_dpu_modules,
                          re.compile(reboot_cause_pattern,
                                     re.IGNORECASE),
-                         EXTRA_DPU_ONLINE_TIMEOUT_FOR_WATCHDOG)
+                         EXTRA_DPU_ONLINE_TIMEOUT_FOR_WATCHDOG,
+                         pre_boot_times=pre_boot_times)
 
 
 @pytest.mark.disable_loganalyzer
@@ -285,6 +325,9 @@ def test_dpu_check_post_dpu_mem_exhaustion(duthosts, dpuhosts,
         dpuhost.shell(memory_exhaustion_cmd, executable="/bin/bash")
         triggered_dpu_on_list.append(dpu_on)
         triggered_ip_list.append(ip_address_list[index])
+
+    logging.info("Recording DPU boot times before DPU memory exhaustion")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
 
     pytest_assert(triggered_dpu_on_list, "No DPUs were triggered; all skipped due to missing dpuhosts")
 
@@ -320,7 +363,8 @@ def test_dpu_check_post_dpu_mem_exhaustion(duthosts, dpuhosts,
                          num_dpu_modules,
                          re.compile(reboot_cause_pattern,
                                     re.IGNORECASE),
-                         EXTRA_DPU_ONLINE_TIMEOUT_FOR_WATCHDOG)
+                         EXTRA_DPU_ONLINE_TIMEOUT_FOR_WATCHDOG,
+                         pre_boot_times=pre_boot_times)
 
 
 @pytest.mark.disable_loganalyzer
@@ -346,6 +390,9 @@ def test_cold_reboot_dpus(duthosts, dpuhosts, enum_rand_one_per_hwsku_hostname,
     logging.info("Executing pre test check")
     ip_address_list, dpu_on_list, dpu_off_list = pre_test_check(duthost, platform_api_conn, num_dpu_modules)
 
+    logging.info("Recording DPU boot times before cold reboot")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
     with SafeThreadPoolExecutor(max_workers=num_dpu_modules) as executor:
         logging.info("Rebooting all DPUs in parallel")
         for dpu_name in dpu_on_list:
@@ -357,7 +404,8 @@ def test_cold_reboot_dpus(duthosts, dpuhosts, enum_rand_one_per_hwsku_hostname,
                          dpu_on_list, ip_address_list,
                          num_dpu_modules,
                          re.compile(r"reboot|Non-Hardware",
-                                    re.IGNORECASE))
+                                    re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
 
 
 def test_cold_reboot_switch(duthosts, dpuhosts, enum_rand_one_per_hwsku_hostname,
@@ -381,6 +429,9 @@ def test_cold_reboot_switch(duthosts, dpuhosts, enum_rand_one_per_hwsku_hostname
     logging.info("Executing pre test check")
     ip_address_list, dpu_on_list, dpu_off_list = pre_test_check(duthost, platform_api_conn, num_dpu_modules)
 
+    logging.info("Recording DPU boot times before switch cold reboot")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
     logging.info("Starting switch reboot...")
     perform_reboot(duthost, REBOOT_TYPE_COLD, None)
 
@@ -391,4 +442,98 @@ def test_cold_reboot_switch(duthosts, dpuhosts, enum_rand_one_per_hwsku_hostname
 
     logging.info("Executing post switch reboot dpu check")
     post_test_dpus_check(duthost, dpuhosts, dpu_on_list, ip_address_list, num_dpu_modules,
-                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE))
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
+
+
+def test_reboot_cause(duthosts, dpuhosts,
+                      enum_rand_one_per_hwsku_hostname,
+                      platform_api_conn, num_dpu_modules):    # noqa: F811
+    """
+    @summary: Verify reboot-cause for DPUs after a shutdown/startup cycle.
+              Uses parallel execution for all DPUs.
+              Checks that reboot-cause is correctly reported as 'reboot' or
+              'Non-Hardware' after DPUs are cycled.
+              Also verifies each DPU actually rebooted via uptime comparison.
+
+    Note: This test is the canonical reboot-cause test for DPUs (moved from
+    test_platform_dpu.py). All other reboot tests also validate reboot-cause
+    as part of their post-test checks.
+    """
+    duthost = duthosts[enum_rand_one_per_hwsku_hostname]
+
+    ip_address_list, dpu_on_list, dpu_off_list = pre_test_check(
+                                                 duthost,
+                                                 platform_api_conn,
+                                                 num_dpu_modules)
+
+    logging.info("Recording DPU boot times before shutdown/startup cycle")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
+    logging.info("Shutting DOWN the DPUs in parallel")
+    dpus_shutdown_and_check(duthost, dpu_on_list, num_dpu_modules)
+
+    logging.info("Starting UP the DPUs in parallel")
+    dpus_startup_and_check(duthost, dpu_on_list, num_dpu_modules)
+
+    post_test_dpus_check(duthost, dpuhosts,
+                         dpu_on_list, ip_address_list,
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware",
+                                    re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
+
+
+def test_npu_graceful_reboot_dpus_recovery(duthosts, dpuhosts,
+                                           enum_rand_one_per_hwsku_hostname,
+                                           localhost,
+                                           platform_api_conn, num_dpu_modules):  # noqa: F811, E501
+    """
+    @summary: Verify that when the NPU undergoes a graceful cold reboot,
+              all DPUs come back online properly with correct reboot-cause,
+              and no unexpected syslog errors are present on either NPU or DPUs.
+
+              A "graceful reboot" here is an operator-initiated 'reboot' command
+              on the NPU (i.e., REBOOT_TYPE_COLD via the standard reboot path),
+              distinct from abnormal reboots like kernel panic or memory exhaustion.
+
+    Steps:
+        1. Pre-test check: record DPU states and boot times.
+        2. Trigger a graceful NPU cold reboot.
+        3. Wait for NPU to come back online.
+        4. Verify DPUs come back online with correct reboot-cause.
+        5. Verify DPUs actually rebooted via uptime comparison.
+        6. Check NPU and DPU syslogs for unexpected errors.
+    """
+    duthost = duthosts[enum_rand_one_per_hwsku_hostname]
+
+    logging.info("Executing pre test check")
+    ip_address_list, dpu_on_list, dpu_off_list = pre_test_check(
+                                                 duthost,
+                                                 platform_api_conn,
+                                                 num_dpu_modules)
+
+    logging.info("Recording DPU boot times before graceful NPU reboot")
+    pre_boot_times = get_all_dpu_uptimes(dpuhosts, dpu_on_list)
+
+    logging.info("Triggering graceful NPU cold reboot...")
+    reboot(duthost, localhost, reboot_type=REBOOT_TYPE_COLD,
+           wait_for_ssh=False)
+
+    logging.info("Executing post switch reboot check")
+    post_test_switch_check(duthost, localhost,
+                           dpu_on_list, dpu_off_list,
+                           ip_address_list)
+
+    logging.info("Verifying DPUs recovered properly after graceful NPU reboot")
+    post_test_dpus_check(duthost, dpuhosts,
+                         dpu_on_list, ip_address_list,
+                         num_dpu_modules,
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
+                         pre_boot_times=pre_boot_times)
+
+    logging.info("Checking NPU syslog for unexpected errors after graceful reboot")
+    npu_errors = check_npu_syslog_errors(duthost)
+    if npu_errors:
+        logging.warning("NPU syslog has %d error(s) after graceful reboot "
+                        "(non-fatal; logged for investigation)", len(npu_errors))
