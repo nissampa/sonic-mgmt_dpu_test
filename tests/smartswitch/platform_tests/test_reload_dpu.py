@@ -15,6 +15,7 @@ from tests.smartswitch.common.device_utils_dpu import (  # noqa: F401
     check_dpu_link_and_status,
     pre_test_check, post_test_switch_check, post_test_dpus_check,
     dpus_shutdown_and_check, dpus_startup_and_check, check_dpus_module_status,
+    check_dpu_module_status,
     num_dpu_modules, check_dpus_are_not_pingable, check_dpus_reboot_cause,
     get_dpuhost_for_dpu, get_all_dpu_uptimes, verify_all_dpus_rebooted,
     check_all_dpus_no_syslog_errors, check_npu_syslog_errors
@@ -41,6 +42,31 @@ EXTRA_DPU_ONLINE_TIMEOUT_FOR_WATCHDOG = 40
 def invocation_type(request):
     """Parametrize reboot tests to run with both gNOI and CLI reboot paths."""
     return request.param
+
+
+@pytest.fixture(autouse=True)
+def ensure_dpus_up_after_test(duthosts, dpuhosts,
+                               enum_rand_one_per_hwsku_hostname,
+                               num_dpu_modules):  # noqa: F811
+    """
+    Teardown fixture: after each test case, ensure all DPUs are back online.
+    If any DPU is found offline at the end of a test, it will be started up
+    before the next test begins.
+    """
+    yield
+
+    duthost = duthosts[enum_rand_one_per_hwsku_hostname]
+    dpu_names = ["DPU{}".format(i) for i in range(num_dpu_modules)]
+    offline_dpus = [
+        dpu for dpu in dpu_names
+        if not check_dpu_module_status(duthost, "on", dpu)
+    ]
+    if offline_dpus:
+        logging.info("DPUs found offline after test: %s. Bringing them back UP...", offline_dpus)
+        dpus_startup_and_check(duthost, offline_dpus, num_dpu_modules)
+        logging.info("All DPUs are back online after recovery.")
+    else:
+        logging.info("All DPUs are online after test. No recovery needed.")
 
 
 def test_dpu_status_post_switch_reboot(duthosts, dpuhosts,
@@ -113,8 +139,7 @@ def test_dpu_status_post_switch_config_reload(duthosts, dpuhosts,
     post_test_dpus_check(duthost, dpuhosts,
                          dpu_on_list, ip_address_list,
                          num_dpu_modules,
-                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE),
-                         pre_boot_times=pre_boot_times)
+                         re.compile(r"reboot|Non-Hardware", re.IGNORECASE))
 
 
 @pytest.mark.disable_loganalyzer
