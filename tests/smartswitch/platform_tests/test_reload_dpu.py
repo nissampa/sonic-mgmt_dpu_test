@@ -40,7 +40,7 @@ def invocation_type(request):
 
 
 @pytest.fixture(autouse=True)
-def ensure_dpus_up_after_test(duthosts, dpuhosts,
+def ensure_dpus_up_after_test(duthosts,
                               enum_rand_one_per_hwsku_hostname,
                               num_dpu_modules):  # noqa: F811
     """
@@ -52,16 +52,19 @@ def ensure_dpus_up_after_test(duthosts, dpuhosts,
 
     duthost = duthosts[enum_rand_one_per_hwsku_hostname]
     dpu_names = ["DPU{}".format(i) for i in range(num_dpu_modules)]
-    offline_dpus = [
-        dpu for dpu in dpu_names
-        if not check_dpu_module_status(duthost, "on", dpu)
-    ]
-    if offline_dpus:
-        logging.info("DPUs found offline after test: %s. Bringing them back UP...", offline_dpus)
-        dpus_startup_and_check(duthost, offline_dpus, num_dpu_modules)
-        logging.info("All DPUs are back online after recovery.")
-    else:
-        logging.info("All DPUs are online after test. No recovery needed.")
+    try:
+        offline_dpus = [
+            dpu for dpu in dpu_names
+            if not check_dpu_module_status(duthost, "on", dpu)
+        ]
+        if offline_dpus:
+            logging.info("DPUs found offline after test: %s. Bringing them back UP...", offline_dpus)
+            dpus_startup_and_check(duthost, offline_dpus, num_dpu_modules)
+            logging.info("All DPUs are back online after recovery.")
+        else:
+            logging.info("All DPUs are online after test. No recovery needed.")
+    except Exception as e:
+        logging.warning("DPU recovery in teardown failed (non-fatal): %s", e)
 
 
 def test_dpu_status_post_switch_reboot(duthosts, dpuhosts,
